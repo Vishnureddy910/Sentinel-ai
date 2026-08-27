@@ -1,0 +1,7 @@
+torch
+torchvision
+flwr
+wandb
+streamlit
+opencv-python
+pandas

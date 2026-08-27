@@ -1,0 +1,151 @@
+Image Index,Finding Labels
+dummy_0001.png,Emphysema
+dummy_0002.png,Atelectasis
+dummy_0003.png,No Finding
+dummy_0004.png,Edema|Emphysema|Pleural_Thickening|Hernia
+dummy_0005.png,Pneumothorax
+dummy_0006.png,Mass|Consolidation
+dummy_0007.png,No Finding
+dummy_0008.png,Atelectasis|Pneumonia|Pleural_Thickening
+dummy_0009.png,Atelectasis
+dummy_0010.png,Mass|Fibrosis|Pleural_Thickening
+dummy_0011.png,Mass|Consolidation
+dummy_0012.png,Atelectasis|Pleural_Thickening
+dummy_0013.png,No Finding
+dummy_0014.png,Effusion|Pneumonia
+dummy_0015.png,Edema|Emphysema
+dummy_0016.png,Pneumothorax|Consolidation
+dummy_0017.png,No Finding
+dummy_0018.png,Nodule|Emphysema|Hernia
+dummy_0019.png,Emphysema|Pleural_Thickening
+dummy_0020.png,Pneumonia|Edema
+dummy_0021.png,Infiltration|Pleural_Thickening
+dummy_0022.png,Atelectasis|Effusion
+dummy_0023.png,Fibrosis
+dummy_0024.png,Hernia
+dummy_0025.png,No Finding
+dummy_0026.png,No Finding
+dummy_0027.png,Nodule
+dummy_0028.png,No Finding
+dummy_0029.png,Consolidation
+dummy_0030.png,Infiltration|Mass|Pneumothorax|Fibrosis
+dummy_0031.png,Atelectasis|Effusion
+dummy_0032.png,Pneumothorax|Emphysema
+dummy_0033.png,Atelectasis|Effusion|Fibrosis
+dummy_0034.png,Fibrosis
+dummy_0035.png,Cardiomegaly
+dummy_0036.png,Infiltration|Pneumonia|Consolidation
+dummy_0037.png,Atelectasis
+dummy_0038.png,Pneumothorax|Pleural_Thickening
+dummy_0039.png,Mass|Hernia
+dummy_0040.png,Cardiomegaly
+dummy_0041.png,Infiltration|Emphysema
+dummy_0042.png,Nodule
+dummy_0043.png,Atelectasis|Effusion|Infiltration|Nodule
+dummy_0044.png,Nodule|Emphysema|Pleural_Thickening
+dummy_0045.png,Effusion|Consolidation|Edema|Fibrosis
+dummy_0046.png,Nodule|Pleural_Thickening
+dummy_0047.png,Atelectasis|Fibrosis
+dummy_0048.png,Effusion|Nodule|Fibrosis
+dummy_0049.png,Atelectasis|Mass|Pneumothorax|Pleural_Thickening
+dummy_0050.png,Pneumothorax|Edema|Emphysema
+dummy_0051.png,Pneumonia|Pneumothorax|Consolidation|Emphysema
+dummy_0052.png,Mass|Pleural_Thickening
+dummy_0053.png,Pneumonia
+dummy_0054.png,Mass
+dummy_0055.png,Pneumothorax|Fibrosis
+dummy_0056.png,Pneumothorax|Consolidation
+dummy_0057.png,Infiltration|Pneumothorax|Fibrosis
+dummy_0058.png,Effusion|Nodule|Pneumonia
+dummy_0059.png,Nodule
+dummy_0060.png,No Finding
+dummy_0061.png,Nodule|Pneumothorax
+dummy_0062.png,Cardiomegaly|Mass|Pneumothorax
+dummy_0063.png,Cardiomegaly|Mass|Nodule|Pneumonia|Consolidation|Emphysema|Pleural_Thickening
+dummy_0064.png,No Finding
+dummy_0065.png,Infiltration|Edema|Emphysema
+dummy_0066.png,Fibrosis|Pleural_Thickening
+dummy_0067.png,Effusion
+dummy_0068.png,Nodule
+dummy_0069.png,Nodule|Pneumonia
+dummy_0070.png,No Finding
+dummy_0071.png,Effusion|Pneumonia
+dummy_0072.png,Consolidation
+dummy_0073.png,Pneumonia
+dummy_0074.png,Effusion
+dummy_0075.png,Atelectasis|Cardiomegaly|Pleural_Thickening
+dummy_0076.png,Mass
+dummy_0077.png,Emphysema
+dummy_0078.png,Pneumothorax
+dummy_0079.png,Infiltration|Emphysema
+dummy_0080.png,Hernia
+dummy_0081.png,Nodule
+dummy_0082.png,Cardiomegaly|Emphysema
+dummy_0083.png,Edema
+dummy_0084.png,No Finding
+dummy_0085.png,No Finding
+dummy_0086.png,Atelectasis|Mass|Pneumonia|Fibrosis
+dummy_0087.png,Infiltration|Mass|Pneumothorax|Consolidation|Fibrosis
+dummy_0088.png,Fibrosis
+dummy_0089.png,Pneumonia|Emphysema|Pleural_Thickening
+dummy_0090.png,Atelectasis
+dummy_0091.png,Cardiomegaly|Effusion|Infiltration
+dummy_0092.png,Mass
+dummy_0093.png,Edema|Pleural_Thickening
+dummy_0094.png,Effusion
+dummy_0095.png,Effusion|Pneumonia|Pleural_Thickening|Hernia
+dummy_0096.png,Effusion|Infiltration|Fibrosis
+dummy_0097.png,Infiltration
+dummy_0098.png,Atelectasis|Consolidation
+dummy_0099.png,Mass
+dummy_0100.png,Cardiomegaly|Pleural_Thickening
+dummy_0101.png,Edema|Fibrosis
+dummy_0102.png,Pneumothorax
+dummy_0103.png,Effusion|Consolidation|Fibrosis
+dummy_0104.png,Mass|Fibrosis|Hernia
+dummy_0105.png,Effusion|Pneumothorax
+dummy_0106.png,Infiltration|Pneumonia
+dummy_0107.png,Effusion|Infiltration|Emphysema|Fibrosis|Pleural_Thickening
+dummy_0108.png,Pneumothorax
+dummy_0109.png,No Finding
+dummy_0110.png,Nodule
+dummy_0111.png,Atelectasis|Emphysema
+dummy_0112.png,Effusion|Mass|Pneumonia|Edema
+dummy_0113.png,Consolidation|Pleural_Thickening
+dummy_0114.png,Pneumothorax|Consolidation
+dummy_0115.png,Cardiomegaly|Consolidation|Emphysema|Hernia
+dummy_0116.png,Nodule|Edema
+dummy_0117.png,Cardiomegaly|Mass
+dummy_0118.png,Effusion
+dummy_0119.png,Pleural_Thickening
+dummy_0120.png,No Finding
+dummy_0121.png,Pleural_Thickening
+dummy_0122.png,Cardiomegaly|Mass|Nodule|Pneumonia|Pneumothorax|Edema|Emphysema|Fibrosis
+dummy_0123.png,Mass
+dummy_0124.png,Effusion
+dummy_0125.png,Pneumonia|Emphysema
+dummy_0126.png,Effusion|Pleural_Thickening
+dummy_0127.png,Edema|Emphysema
+dummy_0128.png,Atelectasis|Infiltration|Pneumonia|Pneumothorax
+dummy_0129.png,Atelectasis|Pneumothorax|Edema
+dummy_0130.png,Pneumonia|Edema|Pleural_Thickening
+dummy_0131.png,Effusion|Mass|Emphysema|Pleural_Thickening
+dummy_0132.png,Fibrosis
+dummy_0133.png,Mass|Nodule|Emphysema
+dummy_0134.png,Pneumonia|Hernia
+dummy_0135.png,Atelectasis|Mass|Edema
+dummy_0136.png,Hernia
+dummy_0137.png,Mass
+dummy_0138.png,Infiltration|Consolidation
+dummy_0139.png,Cardiomegaly|Edema|Hernia
+dummy_0140.png,Cardiomegaly|Infiltration|Emphysema|Fibrosis|Pleural_Thickening
+dummy_0141.png,Consolidation|Emphysema|Fibrosis
+dummy_0142.png,Pneumonia|Edema
+dummy_0143.png,Atelectasis|Mass|Edema|Pleural_Thickening|Hernia
+dummy_0144.png,Effusion
+dummy_0145.png,Mass|Nodule
+dummy_0146.png,No Finding
+dummy_0147.png,Effusion|Infiltration|Mass|Emphysema
+dummy_0148.png,Cardiomegaly
+dummy_0149.png,Atelectasis|Consolidation|Edema|Hernia
+dummy_0150.png,Nodule|Pneumothorax
