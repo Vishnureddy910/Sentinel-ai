@@ -5,3 +5,4 @@ wandb
 streamlit
 opencv-python
 pandas
+scikit-learn

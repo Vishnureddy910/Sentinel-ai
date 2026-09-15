@@ -54,14 +54,16 @@ if __name__ == "__main__":
     ])
     
     # Load the specific dataset for this client (Non-IID split)
-    data_path = rf"data\client_{client_id}"
-    csv_path = rf"data\client_{client_id}\metadata.csv"
+    csv_path = f"data/client_{client_id}/metadata.csv"
+    data_path = f"data/client_{client_id}"
     
     dataset = ChestXrayDataset(csv_file=csv_path, img_dir=data_path, transform=transform)
     dataloader = DataLoader(dataset, batch_size=16, shuffle=True)
     
-    # Start the Flower client
+    # Allow passing the server address as a second command-line argument, default to localhost
+    server_ip = sys.argv[2] if len(sys.argv) > 2 else "127.0.0.1:8080"
+    
     fl.client.start_numpy_client(
-        server_address="127.0.0.1:8080",
+        server_address=server_ip,
         client=SentinelClient(dataloader, device),
     )

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  central_server:
+    build: .
+    command: python -m federated.server
+    ports:
+      - "8080:8080"
+  
+  hospital_1:
+    build: .
+    command: python -m federated.client 1 central_server:8080
+    depends_on:
+      - central_server
+
+  hospital_2:
+    build: .
+    command: python -m federated.client 2 central_server:8080
+    depends_on:
+      - central_server
