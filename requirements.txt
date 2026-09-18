@@ -1,8 +1,16 @@
-torch
-torchvision
-flwr
-wandb
-streamlit
-opencv-python
-pandas
-scikit-learn
+# Versions used to produce the reported results (Docker image, Python 3.9):
+# torch 2.8.0, torchvision 0.23.0, flwr 1.23.0, streamlit 1.50.0,
+# opencv-python 5.0.0.93, pandas 2.3.3, scikit-learn 1.6.1, numpy 2.0.2
+#
+# flwr is pinned exactly: start_server/start_client are deprecated in 1.23
+# and may be removed in later releases. The rest are lower bounds so the
+# demo still installs on newer Python versions.
+torch>=2.3
+torchvision>=0.18
+flwr==1.23.0
+streamlit>=1.30
+opencv-python>=4.8
+pandas>=2.0
+scikit-learn>=1.3
+numpy>=1.24
+pillow>=10.0
