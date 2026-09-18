@@ -1,41 +1,54 @@
 import os
+import shutil
+from pathlib import Path
 import pandas as pd
-import numpy as np
-import cv2
 
-# 14 disease labels from the NIH dataset
-DISEASES = ['Atelectasis', 'Cardiomegaly', 'Effusion', 'Infiltration', 'Mass', 'Nodule', 'Pneumonia',
-            'Pneumothorax', 'Consolidation', 'Edema', 'Emphysema', 'Fibrosis', 'Pleural_Thickening', 'Hernia']
+data_dir = Path(__file__).parent / "data"
+client_1_dir = data_dir / "client_1"
+client_2_dir = data_dir / "client_2"
 
-def create_dummy_client_data(client_dir, num_images, start_idx):
-    os.makedirs(client_dir, exist_ok=True)
-    data = []
+client_1_dir.mkdir(parents=True, exist_ok=True)
+client_2_dir.mkdir(parents=True, exist_ok=True)
 
-    for i in range(num_images):
-        img_name = f"dummy_{start_idx + i:04d}.png"
-        img_path = os.path.join(client_dir, img_name)
+# 1. Locate Master CSV
+csv_candidates = list(data_dir.rglob("Data_Entry*.csv"))
+if not csv_candidates:
+    raise FileNotFoundError("Could not find Data_Entry_2017.csv inside the data directory.")
+master_csv_path = csv_candidates[0]
+print(f"Using master CSV: {master_csv_path}")
+df = pd.read_csv(master_csv_path)
 
-        # Create a blank 224x224 dummy image using OpenCV
-        img = np.zeros((224, 224), dtype=np.uint8)
-        cv2.imwrite(img_path, img)
+# 2. Find all images
+print("Scanning for extracted images...")
+all_images = [p for p in data_dir.rglob("*.png") if "client_1" not in str(p) and "client_2" not in str(p)]
+print(f"Found {len(all_images)} images to partition.")
 
-        # Randomly assign diseases to simulate real patient data
-        row = {'Image Index': img_name}
-        labels = (np.random.rand(len(DISEASES)) > 0.85).astype(int)
-        active_diseases = [DISEASES[j] for j, val in enumerate(labels) if val == 1]
-        row['Finding Labels'] = "|".join(active_diseases) if active_diseases else "No Finding"
-        
-        data.append(row)
+# 3. Move images 50/50
+client_1_names = set()
+client_2_names = set()
 
-    # Save the metadata CSV
-    df = pd.DataFrame(data)
-    df.to_csv(os.path.join(client_dir, 'metadata.csv'), index=False)
+for i, img_path in enumerate(all_images):
+    try:
+        if i % 2 == 0:
+            shutil.move(str(img_path), str(client_1_dir / img_path.name))
+            client_1_names.add(img_path.name)
+        else:
+            shutil.move(str(img_path), str(client_2_dir / img_path.name))
+            client_2_names.add(img_path.name)
+    except Exception:
+        pass
 
-if __name__ == "__main__":
-    print("Generating 150 images for Client 1...")
-    create_dummy_client_data(r"data\client_1", 150, 1)
-    
-    print("Generating 50 images for Client 2...")
-    create_dummy_client_data(r"data\client_2", 50, 151)
-    
-    print("Sandbox split complete!")
+print(f"Images moved: {len(client_1_names)} to client_1, {len(client_2_names)} to client_2.")
+
+# 4. Generate partitioned CSVs
+image_col = "Image Index" if "Image Index" in df.columns else df.columns[0]
+
+df_client_1 = df[df[image_col].isin(client_1_names)]
+df_client_2 = df[df[image_col].isin(client_2_names)]
+
+# Save as Data_Entry_2017.csv and metadata.csv in case your code expects either name
+for folder, client_df in [(client_1_dir, df_client_1), (client_2_dir, df_client_2)]:
+    client_df.to_csv(folder / "Data_Entry_2017.csv", index=False)
+    client_df.to_csv(folder / "metadata.csv", index=False)
+
+print("Partitioned CSVs created successfully for both clients!")
