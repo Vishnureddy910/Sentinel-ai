@@ -1,0 +1,79 @@
+# Byzantine-robustness experiment: 5 hospitals, 1 of them malicious.
+#
+#   STRATEGY=fedavg docker compose -f docker-compose.attack.yml up   # no defense
+#   STRATEGY=krum   docker compose -f docker-compose.attack.yml up   # Multi-Krum
+#
+# Krum needs n > 2f + 2 to tolerate f attackers, hence 5 clients for f = 1.
+
+x-hospital: &hospital
+  image: sentinel-ai-hospital_1
+  volumes:
+    - ./data:/app/data
+    # Mount code rather than baking it in: lets the experiment run without a
+    # rebuild (and without needing registry access for the base image).
+    - ./federated:/app/federated:ro
+    - ./models:/app/models:ro
+  depends_on:
+    - central_server
+  shm_size: '4gb'
+  environment: &henv
+    GRPC_ENABLE_FORK_SUPPORT: "0"
+    NUM_WORKERS: "6"
+    BATCH_SIZE: "48"
+    EVAL_BATCH_SIZE: "64"
+    SAMPLES_PER_ROUND: "8000"
+    LEARNING_RATE: "0.0001"
+    ATTACK: "none"
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+
+services:
+  central_server:
+    image: sentinel-ai-central_server
+    command: python -m federated.server
+    volumes:
+      - ./data:/app/data
+      - ./federated:/app/federated:ro
+      - ./models:/app/models:ro
+    ports:
+      - "8080:8080"
+    environment:
+      GRPC_ENABLE_FORK_SUPPORT: "0"
+      STRATEGY: "${STRATEGY:-krum}"
+      EXPERIMENT: "${EXPERIMENT_NAME:-${STRATEGY:-krum}_attacked}"
+      NUM_ROUNDS: "${NUM_ROUNDS:-15}"
+      NUM_CLIENTS: "5"
+      NUM_MALICIOUS: "${NUM_MALICIOUS:-1}"
+      LEARNING_RATE: "0.0001"
+      MODEL_DIR: /app/data/models
+
+  hospital_1:
+    <<: *hospital
+    command: python -m federated.client 1 central_server:8080
+
+  hospital_2:
+    <<: *hospital
+    command: sh -c "sleep 3 && python -m federated.client 2 central_server:8080"
+
+  hospital_3:
+    <<: *hospital
+    command: sh -c "sleep 6 && python -m federated.client 3 central_server:8080"
+
+  hospital_4:
+    <<: *hospital
+    command: sh -c "sleep 9 && python -m federated.client 4 central_server:8080"
+
+  # The attacker. Trains normally, then returns a negated, scaled update to drag
+  # the global average away from the optimum.
+  hospital_5:
+    <<: *hospital
+    command: sh -c "sleep 12 && python -m federated.client 5 central_server:8080"
+    environment:
+      <<: *henv
+      ATTACK: "${ATTACK5:-signflip}"
+      ATTACK_SCALE: "3.0"

@@ -1,0 +1,10 @@
+file,TRUE LABEL,model flags,top 3 scores,case
+00015282_000.png,Cardiomegaly,"Cardiomegaly, Effusion, Fibrosis, Pneumonia",Cardiomegaly 1.00 | Effusion 0.72 | Fibrosis 0.50,should detect Cardiomegaly
+00001650_005.png,Edema,"Edema, Infiltration, Pneumonia, Consolidation, Mass, Nodule, Effusion",Edema 0.97 | Infiltration 0.76 | Pneumonia 0.65,should detect Edema
+00000099_002.png,Effusion,"Effusion, Consolidation, Atelectasis, Mass, Pneumothorax, Nodule, Hernia",Effusion 1.00 | Consolidation 0.84 | Atelectasis 0.70,should detect Effusion
+00020146_006.png,Pneumothorax,"Pneumothorax, Emphysema, Atelectasis, Pleural_Thickening, Effusion",Pneumothorax 1.00 | Emphysema 0.99 | Atelectasis 0.78,should detect Pneumothorax
+00017504_039.png,Emphysema,"Emphysema, Pneumothorax, Infiltration",Emphysema 1.00 | Pneumothorax 0.99 | Infiltration 0.63,should detect Emphysema
+00007416_001.png,Mass,"Mass, Nodule, Consolidation, Effusion, Hernia",Mass 1.00 | Nodule 0.96 | Consolidation 0.68,should detect Mass
+00020857_009.png,Atelectasis,"Atelectasis, Infiltration, Pneumonia, Consolidation",Atelectasis 0.99 | Infiltration 0.64 | Pneumonia 0.59,should detect Atelectasis
+00000122_000.png,No Finding,(none),Nodule 0.35 | Cardiomegaly 0.29 | Infiltration 0.21,healthy - should flag nothing
+00000133_002.png,No Finding,(none),Nodule 0.31 | Infiltration 0.22 | Pleural_Thickening 0.17,healthy - should flag nothing

@@ -48,49 +48,66 @@ class GradCAM:
         heatmap = torch.sum(activations, dim=0)
         heatmap = F.relu(heatmap)
         
-        # Normalize to 0-1 for visualization
-        heatmap = heatmap / torch.max(heatmap)
-        return heatmap.cpu().numpy()
+        # Normalize to 0-1 for visualization. Guard the divide: if no activation
+        # has positive influence the ReLU leaves an all-zero map.
+        peak = torch.max(heatmap)
+        if peak > 0:
+            heatmap = heatmap / peak
+        return heatmap.detach().cpu().numpy()
 
 if __name__ == "__main__":
-    print("--- Phase 3: Generating Grad-CAM Heatmap ---")
-    
-    # Load the model and set to evaluation mode
-    model = get_model()
+    import sys
+    from pathlib import Path
+
+    from models.dataset import DISEASES, inference_transform
+
+    ROOT = Path(__file__).resolve().parent.parent
+    print("--- Generating Grad-CAM Heatmap ---")
+
+    # Load the federated global model rather than an untrained backbone
+    model = get_model(pretrained=False)
+    for ckpt in [ROOT / "data" / "models" / "global_best.pth",
+                 ROOT / "data" / "models" / "global_latest.pth"]:
+        if ckpt.exists():
+            model.load_state_dict(torch.load(ckpt, map_location="cpu"))
+            print(f"Loaded weights: {ckpt.name}")
+            break
+    else:
+        print("WARNING: no trained checkpoint found, heatmap will be meaningless")
     model.eval()
-    
-    # The roadmap requirement: hook layer4[1].conv2
+
     target_layer = model.layer4[1].conv2
     cam = GradCAM(model, target_layer)
-    
-    # Load a dummy image from Client 1
-    img_path = r"data\client_1\dummy_0001.png"
-    original_image = cv2.imread(img_path)
-    
-    # Add some gray to our black dummy image so we can actually see the heatmap overlay
-    original_image = cv2.add(original_image, np.ones_like(original_image) * 50)
-    
-    # Preprocess the image
-    rgb_img = cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB)
-    pil_img = Image.fromarray(rgb_img)
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    ])
-    input_tensor = transform(pil_img).unsqueeze(0) 
-    
-    # Generate heatmap for class 0 (Atelectasis)
-    print("Running forward and backward hooks...")
-    heatmap = cam.generate_heatmap(input_tensor, target_class=0)
-    
-    # 5. Basic OpenCV overlay
+
+    # Use a real prepared X-ray (first val image) unless one is passed in
+    if len(sys.argv) > 1:
+        img_path = Path(sys.argv[1])
+    else:
+        import pandas as pd
+        client_dir = ROOT / "data" / "client_1_prep"
+        img_path = client_dir / pd.read_csv(client_dir / "val.csv").iloc[0]["Image Index"]
+    print(f"Image: {img_path}")
+
+    pil_img = Image.open(img_path).convert("RGB")
+    input_tensor = inference_transform()(pil_img).unsqueeze(0)
+
+    # Explain whichever disease the model considers most likely
+    with torch.no_grad():
+        probs = torch.sigmoid(model(input_tensor))[0]
+    target_class = int(torch.argmax(probs))
+    print(f"Explaining top prediction: {DISEASES[target_class]} ({probs[target_class]:.3f})")
+
+    heatmap = cam.generate_heatmap(input_tensor, target_class=target_class)
+
+    # Overlay on the 224x224 view the model actually saw
+    base = np.array(pil_img.resize((256, 256)))[16:240, 16:240]
+    base = cv2.cvtColor(base, cv2.COLOR_RGB2BGR)
     heatmap_resized = cv2.resize(heatmap, (224, 224))
     heatmap_colored = cv2.applyColorMap(np.uint8(255 * heatmap_resized), cv2.COLORMAP_JET)
-    
-    # Blend original image and heatmap
-    blended = cv2.addWeighted(original_image, 0.5, heatmap_colored, 0.5, 0)
-    
-    output_path = r"data\sample_test\gradcam_output.png"
-    cv2.imwrite(output_path, blended)
-    print(f"Success! Visual confirmed. Heatmap saved to: {output_path}")
+    blended = cv2.addWeighted(base, 0.6, heatmap_colored, 0.4, 0)
+
+    out_dir = ROOT / "data" / "sample_test"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    output_path = out_dir / "gradcam_output.png"
+    cv2.imwrite(str(output_path), blended)
+    print(f"Saved heatmap to: {output_path}")

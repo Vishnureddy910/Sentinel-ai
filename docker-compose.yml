@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   central_server:
     build: .
@@ -8,19 +6,41 @@ services:
       - ./data:/app/data
     ports:
       - "8080:8080"
-  
-  hospital_1:
+    environment:
+      - GRPC_ENABLE_FORK_SUPPORT=0
+      - NUM_ROUNDS=40
+      - NUM_CLIENTS=2
+      - NUM_MALICIOUS=0
+      - LEARNING_RATE=0.0001
+      - MIN_LR=0.00001
+      - MODEL_DIR=/app/data/models
+
+  hospital_1: &hospital
     build: .
     command: python -m federated.client 1 central_server:8080
     volumes:
       - ./data:/app/data
     depends_on:
       - central_server
+    # Docker's default 64MB /dev/shm makes multi-worker DataLoaders die with
+    # "DataLoader worker killed by signal: Bus error". Workers need real shm.
+    shm_size: '8gb'
+    environment:
+      - GRPC_ENABLE_FORK_SUPPORT=0
+      - NUM_WORKERS=16
+      - BATCH_SIZE=64
+      - EVAL_BATCH_SIZE=128
+      - SAMPLES_PER_ROUND=12000
+      - LEARNING_RATE=0.0001
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
 
   hospital_2:
-    build: .
-    command: python -m federated.client 2 central_server:8080
-    volumes:
-      - ./data:/app/data
-    depends_on:
-      - central_server
+    <<: *hospital
+    # Stagger startup so both clients don't hit the server mid-bind
+    command: sh -c "sleep 5 && python -m federated.client 2 central_server:8080"

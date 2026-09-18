@@ -1,0 +1,36 @@
+{
+  "mean_auc": 0.8199833738387835,
+  "auc": {
+    "Atelectasis": 0.7838031351160338,
+    "Cardiomegaly": 0.8987903684425325,
+    "Effusion": 0.8739916126966419,
+    "Infiltration": 0.6989655285764376,
+    "Mass": 0.8029672266623269,
+    "Nodule": 0.7356219608354063,
+    "Pneumonia": 0.7245316764268523,
+    "Pneumothorax": 0.8829898737253099,
+    "Consolidation": 0.8019284145005117,
+    "Edema": 0.9063771335373123,
+    "Emphysema": 0.8991254829315963,
+    "Fibrosis": 0.8087219314725352,
+    "Pleural_Thickening": 0.7930149848827659,
+    "Hernia": 0.868937903936708
+  },
+  "thresholds": {
+    "Atelectasis": 0.6965608465608466,
+    "Cardiomegaly": 0.9601587301587302,
+    "Effusion": 0.6915873015873016,
+    "Infiltration": 0.5473544973544974,
+    "Mass": 0.820899470899471,
+    "Nodule": 0.7065079365079365,
+    "Pneumonia": 0.6020634920634921,
+    "Pneumothorax": 0.8606878306878307,
+    "Consolidation": 0.7562433862433863,
+    "Edema": 0.810952380952381,
+    "Emphysema": 0.9402645502645504,
+    "Fibrosis": 0.8606878306878307,
+    "Pleural_Thickening": 0.8308465608465609,
+    "Hernia": 0.9750793650793651
+  },
+  "calibration": "F1-optimal, fitted on hospital 2 val"
+}
